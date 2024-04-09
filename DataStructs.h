@@ -3,7 +3,8 @@
 
 typedef struct Accidente Accidente;
 struct Accidente {
-    char* tipo_evento;/* 1.accidente del trabajo
+    //char* tipo_evento;
+    /* 1.accidente del trabajo
     2. accidente de trayecto
     3.incidente (un incidente es un evento que no incluye dias laborales perdidos)
     4.una enfermedad profesional.
@@ -15,9 +16,9 @@ struct Accidente {
     o dejamos las fehcas como string, de ser así basta con usar un fecha_inicio[10]*/
     //fecha fin investigacion, lo mismo pero para el fin de investigación de ser necesario
 
-    int dias_perdidos; //la cantidad de dias perdidos en caso de que corresponda incidente=0
+    int diasPerdidos; //la cantidad de dias perdidos en caso de que corresponda incidente=0
 
-    char* procedimiento_aplicado;/*Existe un “Procedimiento de actuación frente a la 
+    char* procedimientoAplicado;/*Existe un “Procedimiento de actuación frente a la 
     ocurrencia de un accidente del trabajo” que se puede cumplir o no, esto varia de oficina 
     a oficina y puede llenarse con un "si","no" o "En proceso". esto ultimo pasa cuando 
     sucede en diciembre y las investigaciones no terminan de pasar*/
@@ -44,8 +45,10 @@ extern Persona* CrearPersona(char *nombre,char *rut,char sexo,int edad,int sindi
 
 extern void PrintPersona(Persona* person);
 
-extern Accidente* CrearAccidente(char descripcion[]);
+extern void PrintAccident(Accidente* accident);
 
-extern void AgregarAccidente(Persona* persona, char descripcion[]);
+extern Accidente* CrearAccidente(char* descripcion, char* contexto, int diasPerdidos, char* procedimientoAplicado);
+
+extern void AgregarAccidente(Persona* persona, Accidente* accidente);
 
 #endif

@@ -25,7 +25,7 @@ Persona* RandomPerson()
    
    char* rut = "1";
 
-   char sexo = CreateGender(i);
+   char sexo = WhichGender(i);
    
    int edad = RandomRange(21, 63);
    
@@ -51,6 +51,23 @@ Persona* RandomPerson()
    
 }
 
+Accidente* RandomAccidente()
+{
+   int i = RandomRange(0, nAccidentsTypes - 1);
+   int j = RandomRange(0, accidentsPerType - 1);
+   
+   char* accidentType = GetAccidentType(i);
+   char* description = GetAccident(i, j);
+   
+   i = RandomRange(0,2);
+   
+   char* procedure = AppliedProcedure(i);
+   
+   int lostDays = RandomRange(0,14);
+   
+   return CrearAccidente(description, accidentType, lostDays, procedure);
+}
+
 int main()
 {
    srand((unsigned int)time(NULL));
@@ -61,4 +78,8 @@ int main()
    Persona* person = RandomPerson();
    
    PrintPersona(person);
+   
+   Accidente* accidente = RandomAccidente();
+   
+   PrintAccident(accidente);
 }

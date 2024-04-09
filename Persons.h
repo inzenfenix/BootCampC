@@ -15,7 +15,7 @@ extern char** lastNames;
 extern int nNames;
 
 extern char* CreateName(int i, int j);
-extern char CreateGender(int option);
+extern char WhichGender(int i);
 
 extern void InitializeNames();
 

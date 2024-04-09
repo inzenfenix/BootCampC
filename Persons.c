@@ -24,7 +24,7 @@ char* CreateName(int i, int j)
    return name;
 }
 
-char CreateGender(int i)
+char WhichGender(int i)
 {
    return names[i].gender;
 }

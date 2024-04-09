@@ -6,4 +6,6 @@ extern float RandomRangeF(float a, float b);
 extern int RandomRange(int min, int max);
 
 extern Persona* RandomPerson();
+extern Accidente* RandomAccident();
+
 #endif

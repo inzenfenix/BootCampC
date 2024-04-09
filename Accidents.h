@@ -5,12 +5,13 @@ extern char** accidentsTypes;
 extern int nAccidentsTypes;
 
 extern char*** accidents;
-extern int accidentsPerCategory;
+extern int accidentsPerType;
 
 extern char* GetAccident(int type, int i);
+extern char* GetAccidentType(int i);
 extern void SetAccidents(int type);
 
-extern void PrintAccident(char* accident);
+extern char* AppliedProcedure(int i);
 
 extern void InitializeAccidents();
 

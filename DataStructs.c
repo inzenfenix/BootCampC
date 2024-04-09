@@ -41,22 +41,33 @@ void PrintPersona(Persona* person)
    printf("\nEmbarazada: %d\n", person->embarazada);
 }
 
-Accidente* CrearAccidente(char descripcion[]) 
+void PrintAccident(Accidente* accident)
+{
+   printf("\nDescripcion: %s\n", accident->descripcion);
+   printf("\nContexto: %s\n", accident->contexto);
+   printf("\nDias Perdidos: %d\n", accident->diasPerdidos);
+   printf("\nProcedimiento Aplicado: %s\n", accident->procedimientoAplicado);
+}
+
+Accidente* CrearAccidente(char* descripcion, char* contexto, int diasPerdidos, char* procedimientoAplicado) 
 {
     Accidente* nuevoAccidente = (Accidente*)malloc(sizeof(Accidente));
-    strcpy(nuevoAccidente->descripcion, descripcion);
+    
+    nuevoAccidente->contexto = contexto;
+    nuevoAccidente->descripcion = descripcion;
+    nuevoAccidente->diasPerdidos = diasPerdidos;
+    nuevoAccidente->procedimientoAplicado = procedimientoAplicado;
+    
     nuevoAccidente->siguiente = NULL;
+    
     return nuevoAccidente;
 }
 
 // Función para agregar un accidente a la lista de accidentes de una persona
-void AgregarAccidente(Persona * persona, char descripcion[]) 
+void AgregarAccidente(Persona * persona, Accidente* accidente) 
 {
-    Accidente* nuevoAccidente = CrearAccidente(descripcion);
-    
-    nuevoAccidente->siguiente = persona->listaAccidentes;
-    
-    persona->listaAccidentes = nuevoAccidente;
+    accidente->siguiente = persona->listaAccidentes;
+    persona->listaAccidentes = accidente;
 }
 
 
