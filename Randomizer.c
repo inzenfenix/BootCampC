@@ -17,17 +17,15 @@ int RandomRange(int min, int max)
    return(rand() % (max - min + 1)) + min;
 }
 
-int rut_a_edad(int *run) // funcion que convierte un rut a edad en base a modelo
+int rut_a_edad(int run) // función que convierte un RUT a edad en base a modelo
 {
-	double potencia = pow(10,-6);
-	double pendiente = 3.3363697569700348*potencia;
-	double intercepto = 1932.2573852507373;
+    double potencia = pow(10, -6);
+    double pendiente = 3.3363697569700348 * potencia;
+    double intercepto = 1932.2573852507373;
+    double anio_nacimiento = pendiente * run + intercepto; 
+    int edad = 2024 - anio_nacimiento; 
 
-	anio_actual = 2024;
-	anio_nacimiento = pendiente * run + intercepto;
-	edad  = anio_actual - anio_nacimiento;
-
-	return (int)edad;
+    return edad;
 }
 
 Persona* RandomPerson()
