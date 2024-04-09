@@ -15,4 +15,32 @@ extern char* AppliedProcedure(int i);
 
 extern void InitializeAccidents();
 
+enum prodcedimiento_aplicado{
+	Si,
+	No,
+	En_Proceso
+};
+
+
+
+typedef struct DescAccidente DescAccidente;
+
+struct DescAccidente{
+	char * descripcion;
+	int procedimiento_aplicado;
+	int dias_perdidos;
+	
+	
+};
+
+typedef struct PesoAccidente PesoAccidente;
+	
+struct PesoAccidente{
+	char * Contexto;
+	float peso;
+	DescAccidente * Accidentes;
+};
+
+
+
 #endif

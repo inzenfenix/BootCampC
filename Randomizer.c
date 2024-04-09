@@ -35,7 +35,15 @@ Persona* RandomPerson()
    
    if(sexo == 'F')
    {
-      embarazada = RandomRange(0, 1);
+      int peso = RandomRangeF(0.0, 1.0);
+      if (peso <= 0.1)
+      {
+      	embarazada = 1;
+      }
+      else
+      {
+      	embarazada = 0;
+      }
    }
    else
    {
