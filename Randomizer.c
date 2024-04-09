@@ -5,6 +5,7 @@
 #include "Randomizer.h"
 #include "Accidents.h"
 #include "Persons.h"
+#include <math.h>
 
 float RandomRangeF(float min, float max)
 {
@@ -14,6 +15,19 @@ float RandomRangeF(float min, float max)
 int RandomRange(int min, int max)
 {
    return(rand() % (max - min + 1)) + min;
+}
+
+int rut_a_edad(int *run) // funcion que convierte un rut a edad en base a modelo
+{
+	double potencia = pow(10,-6);
+	double pendiente = 3.3363697569700348*potencia;
+	double intercepto = 1932.2573852507373;
+
+	anio_actual = 2024;
+	anio_nacimiento = pendiente * run + intercepto;
+	edad  = anio_actual - anio_nacimiento;
+
+	return (int)edad;
 }
 
 Persona* RandomPerson()
