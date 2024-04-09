@@ -17,8 +17,11 @@ int RandomRange(int min, int max)
    return(rand() % (max - min + 1)) + min;
 }
 
-int rut_a_edad(int run) // función que convierte un RUT a edad en base a modelo
+int rut_a_edad(char* rut) 
 {
+   char delimiters[] = "-"; 
+   run = strtok(rut, delimiters);
+
     double potencia = pow(10, -6);
     double pendiente = 3.3363697569700348 * potencia;
     double intercepto = 1932.2573852507373;
@@ -35,11 +38,11 @@ Persona* RandomPerson()
    
    char * nombre = CreateName(i, j);
    
-   char* rut = "1";
+   char* rut = "20496709-1";
 
    char sexo = WhichGender(i);
    
-   int edad = RandomRange(21, 63);
+   int edad = rut_a_edad(rut)
    
    int sindical = RandomRange(0, 1);
    
