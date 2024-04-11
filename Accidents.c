@@ -217,15 +217,15 @@ void InitializeAccidents()
    accidentsTypes[8].Contexto = "Accidente en horario colacion";
    accidentsTypes[9].Contexto = "Situaciones disruptivas y de alta complejidad";
 
-   accidentsTypes[0].peso = 0.25;
-   accidentsTypes[1].peso = 0.40;
-   accidentsTypes[2].peso = 0.45;
-   accidentsTypes[3].peso = 0.50;
+   accidentsTypes[0].peso = 0.30;
+   accidentsTypes[1].peso = 0.38;
+   accidentsTypes[2].peso = 0.48;
+   accidentsTypes[3].peso = 0.51;
    accidentsTypes[4].peso = 0.60;
    accidentsTypes[5].peso = 0.65;
-   accidentsTypes[6].peso = 0.68;
-   accidentsTypes[7].peso = 0.70;
-   accidentsTypes[8].peso = 0.95;
+   accidentsTypes[6].peso = 0.74;
+   accidentsTypes[7].peso = 0.84;
+   accidentsTypes[8].peso = 0.96;
    accidentsTypes[9].peso = 0.99;
 
 
