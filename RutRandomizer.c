@@ -114,8 +114,14 @@ char * formato_rut(Nodo *nodo, int digito, char * cadena, int len) {
         strcpy(cadena_copia, cadena);
         strcat(cadena, guion);
         strcpy(cadena_copia2, cadena);
-        sprintf(cadena_copia2, "%d", digito);
-        strcat(cadena, cadena_copia2);
+        if (digito != 99) {
+            sprintf(cadena_copia2, "%d", digito);
+            strcat(cadena, cadena_copia2);
+        }
+        else {
+            char digito_K[2] = "K\0";
+            strcat(cadena, digito_K);
+        }    
         return cadena;
     }
     if (n != len) {
