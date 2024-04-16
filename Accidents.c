@@ -15,9 +15,62 @@ DescAccidente GetAccident(int type, int i)
    return accidentsTypes[type].Accidentes[i];
 }
 
-PesoAccidente GetAccidentType(int i)
+//Devuelve el contexto o tipo de accidente, si es sindical vuelve accidentes de sindical
+//Usa un valor entre 0 y 1 para determinar el tipo de accidente
+int GetAccidentTypeIndex(int sindical, int peso)
 {
-   return accidentsTypes[i];
+   if(sindical)
+   {
+      return 3;
+   }
+   
+   if(peso >= 0.0 && peso < .3)
+   {
+      return 0;
+   }
+   
+   if(peso >= .3 && peso < .38)
+   {
+      return 1;
+   }
+   
+   if(peso >= .38 && peso < .48)
+   {
+      return 2;
+   }
+   
+   if(peso >= .48 && peso < .60)
+   {
+      return 4;
+   }
+   
+   if(peso >= .60 && peso < .65)
+   {
+      return 5;
+   }
+   
+   if(peso >= .65 && peso < .74)
+   {
+      return 6;
+   }
+   
+   if(peso >= .74 && peso < .84)
+   {
+      return 7;
+   }
+   
+   if(peso >= .84 && peso < .96)
+   {
+      return 8;
+   }
+   
+   if(peso >= .96 && peso <= 1.0)
+   {
+      return 9;
+   }
+   
+   else
+      return 0;
 }
 
 
@@ -226,7 +279,7 @@ void InitializeAccidents()
    accidentsTypes[6].peso = 0.74;
    accidentsTypes[7].peso = 0.84;
    accidentsTypes[8].peso = 0.96;
-   accidentsTypes[9].peso = 0.99;
+   accidentsTypes[9].peso = 1.00;
 
    
    for(int i = 0; i < nAccidentsTypes; i++)

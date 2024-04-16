@@ -1,6 +1,5 @@
 #ifndef _DataStructs_H
 #define _DataStruct_H
-
 typedef struct Accidente Accidente;
 struct Accidente {
     //char* tipo_evento;
@@ -18,7 +17,7 @@ struct Accidente {
 
     int diasPerdidos; //la cantidad de dias perdidos en caso de que corresponda incidente=0
 
-    char* procedimientoAplicado;/*Existe un “Procedimiento de actuación frente a la 
+    int procedimientoAplicado;/*Existe un “Procedimiento de actuación frente a la 
     ocurrencia de un accidente del trabajo” que se puede cumplir o no, esto varia de oficina 
     a oficina y puede llenarse con un "si","no" o "En proceso". esto ultimo pasa cuando 
     sucede en diciembre y las investigaciones no terminan de pasar*/
@@ -47,8 +46,10 @@ extern void PrintPersona(Persona* person);
 
 extern void PrintAccident(Accidente* accident);
 
-extern Accidente* CrearAccidente(char* descripcion, char* contexto, int diasPerdidos, char* procedimientoAplicado);
+extern void PrintAccidents(Accidente* accidents, int accidenteActual);
 
-extern void AgregarAccidente(Persona* persona, Accidente* accidente);
+extern Accidente* CrearAccidente(char* descripcion, char* contexto, int diasPerdidos, int procedimientoAplicado);
+
+extern Accidente* AgregarAccidente(Accidente* lista, Accidente* accidente);
 
 #endif

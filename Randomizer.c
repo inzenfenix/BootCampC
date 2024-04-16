@@ -89,22 +89,22 @@ Persona* RandomPerson()
 }
 
 
-/*Accidente* RandomAccidente()
+Accidente* RandomAccidente(Persona* person)
 {
-   int i = RandomRange(0, nAccidentsTypes - 1);
+   int peso = RandomRangeF(0, 1);
+   
+   int accidentTypeIndex = GetAccidentTypeIndex(person->sindical, peso);
+   char* accidentType = accidentsTypes[accidentTypeIndex].Contexto;
    int j = RandomRange(0, accidentsPerType - 1);
    
-   char* accidentType = GetAccidentType(i);
-   char* description = GetAccident(i, j);
+   DescAccidente accidente = GetAccident(accidentTypeIndex, j);
    
-   i = RandomRange(0,2);
-   
-   char* procedure = AppliedProcedure(i);
-   
-   int lostDays = RandomRange(0,14);
+   char* description = accidente.descripcion;
+   int procedure = accidente.procedimiento_aplicado;
+   int lostDays = accidente.dias_perdidos;
    
    return CrearAccidente(description, accidentType, lostDays, procedure);
-}*/
+}
 
 int main()
 {
@@ -117,7 +117,21 @@ int main()
    
    PrintPersona(person);
    
-   //Accidente* accidente = RandomAccidente();
+   Accidente* accidente = RandomAccidente(person);
    
-   //PrintAccident(accidente);
+   person->listaAccidentes = accidente;
+   
+   int accidents = RandomRange(1,3);
+   
+   if(accidents > 1)
+   {
+      for(int i = 0; i < accidents - 1; i++)
+      {
+         person->listaAccidentes = AgregarAccidente(person->listaAccidentes, RandomAccidente(person));
+      }
+   }
+   
+   PrintAccidents(person->listaAccidentes, 1);
+   
+
 }

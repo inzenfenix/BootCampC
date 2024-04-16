@@ -46,10 +46,10 @@ void PrintAccident(Accidente* accident)
    printf("\nDescripcion: %s\n", accident->descripcion);
    printf("\nContexto: %s\n", accident->contexto);
    printf("\nDias Perdidos: %d\n", accident->diasPerdidos);
-   printf("\nProcedimiento Aplicado: %s\n", accident->procedimientoAplicado);
+   printf("\nProcedimiento Aplicado: %d\n", accident->procedimientoAplicado);
 }
 
-Accidente* CrearAccidente(char* descripcion, char* contexto, int diasPerdidos, char* procedimientoAplicado) 
+Accidente* CrearAccidente(char* descripcion, char* contexto, int diasPerdidos, int procedimientoAplicado) 
 {
     Accidente* nuevoAccidente = (Accidente*)malloc(sizeof(Accidente));
     
@@ -64,10 +64,27 @@ Accidente* CrearAccidente(char* descripcion, char* contexto, int diasPerdidos, c
 }
 
 // Función para agregar un accidente a la lista de accidentes de una persona
-void AgregarAccidente(Persona * persona, Accidente* accidente) 
+Accidente* AgregarAccidente(Accidente * listaAccidentes, Accidente* accidente) 
 {
-    accidente->siguiente = persona->listaAccidentes;
-    persona->listaAccidentes = accidente;
+    accidente->siguiente = listaAccidentes;
+    
+    
+    return accidente;
+}
+
+void PrintAccidents(Accidente* accidents, int accidenteActual)
+{
+   if(accidents == NULL)
+   {
+      printf("\nFin Accidentes\n");
+      return;
+   }
+   
+   printf("\n**** ACCIDENTE %d: ****\n", accidenteActual);
+   PrintAccident(accidents);
+   printf("\n**** FIN ACCIDENTE %d: ****\n", accidenteActual);
+   
+   PrintAccidents(accidents->siguiente , ++accidenteActual);
 }
 
 

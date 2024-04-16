@@ -13,7 +13,7 @@ typedef struct DescAccidente DescAccidente;
 
 struct DescAccidente{
 	char * descripcion;
-	enum procedimiento_aplicado procedimiento_aplicado;
+	int procedimiento_aplicado;
 	int dias_perdidos;
 	
 };
@@ -33,7 +33,7 @@ extern int nAccidentsTypes;
 extern int accidentsPerType;
 
 extern DescAccidente GetAccident(int type, int i);
-extern PesoAccidente GetAccidentType(int i);
+extern int GetAccidentTypeIndex(int sindical, int peso);
 extern void SetAccidents(int type);
 
 //extern char* AppliedProcedure(int i);
