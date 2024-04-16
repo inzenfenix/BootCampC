@@ -5,7 +5,7 @@
 char** lastNames = NULL;
 name* names = NULL;
 
-int nNames = 10;
+int nNames = 11;
 
 char* CreateName(int i, int j)
 {
@@ -63,6 +63,8 @@ void InitializeNames()
      
    names[9].name = "Trinidad "; 
    names[9].gender = 'F';  
+   names[10].name = "Mauricio Alex "; 
+   names[10].gender = 'F';   
    
    lastNames[0] = "Fernandez";
    lastNames[1] = "Gomez";
@@ -74,4 +76,5 @@ void InitializeNames()
    lastNames[7] = "Del Rio";
    lastNames[8] = "Silva";
    lastNames[9] = "Pavez";
+   lastNames[10] = "Fuenzalida";
 }
