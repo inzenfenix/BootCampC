@@ -76,5 +76,5 @@ void InitializeNames()
    lastNames[7] = "Del Rio";
    lastNames[8] = "Silva";
    lastNames[9] = "Pavez";
-   lastNames[10] = "Fuenzalida";
+   lastNames[10] = "Vasquez";
 }
