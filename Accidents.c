@@ -6,13 +6,13 @@
 PesoAccidente * accidentsTypes = NULL;
 int nAccidentsTypes = 10;
 
-char*** accidents = NULL;
+//char*** accidents = NULL;
 int accidentsPerType = 5;
 
 
-char* GetAccident(int type, int i)
+DescAccidente GetAccident(int type, int i)
 {
-   return accidents[type][i];
+   return accidentsTypes[type].Accidentes[i];
 }
 
 PesoAccidente GetAccidentType(int i)
@@ -228,8 +228,6 @@ void InitializeAccidents()
    accidentsTypes[8].peso = 0.96;
    accidentsTypes[9].peso = 0.99;
 
-
-   accidents = (char***)malloc(sizeof(char**) * nAccidentsTypes);
    
    for(int i = 0; i < nAccidentsTypes; i++)
    {

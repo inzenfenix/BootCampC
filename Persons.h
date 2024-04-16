@@ -1,5 +1,5 @@
-#ifndef Persons_H
-#define Persons_H
+#ifndef _Persons_H
+#define _Persons_H
 
 typedef struct Name name;
 

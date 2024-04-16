@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include "rut_randomizer.h" 
+#include "RutRandomizer.h" 
 
 int randomRange(int min, int max){
     return (rand() % (max - min + 1)) + min;
@@ -132,7 +132,7 @@ char * formato_rut(Nodo *nodo, int digito, char * cadena, int len) {
 
 
 // funcion principal
-char * create_rut() {
+char * CreateRut() {
     Nodo *rut = NULL;
     rut = insert(randomRange(0,2), rut);
     if (rut->dato == 0) {

@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "accidents.h": "c",
+        "rut_randomizer.h": "c"
+    }
+}

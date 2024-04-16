@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+#include <math.h>
 #include "DataStructs.h"
 #include "Randomizer.h"
 #include "Accidents.h"
 #include "Persons.h"
-#include <math.h>
+#include "RutRandomizer.h"
+
 
 float RandomRangeF(float min, float max)
 {
@@ -17,20 +20,27 @@ int RandomRange(int min, int max)
    return(rand() % (max - min + 1)) + min;
 }
 
+//Funcion que pasa de rut a edad
 int rut_a_edad(char* rut) 
 {
-   char delimiters[] = "-"; 
-   run = strtok(rut, delimiters);
+   char* delimiters = "-";
+   
+    
+   int run = atoi(strtok(rut, delimiters));
+   
+   if(run > 22000000)
+      return RandomRange(21,35);
 
     double potencia = pow(10, -6);
     double pendiente = 3.3363697569700348 * potencia;
     double intercepto = 1932.2573852507373;
     double anio_nacimiento = pendiente * run + intercepto; 
-    int edad = 2024 - anio_nacimiento; 
+    int edad = 2024 - anio_nacimiento;
 
     return edad;
 }
 
+//Crea todo lo necesario para una persona
 Persona* RandomPerson()
 {   
    int i = RandomRange(0, nNames - 1);
@@ -38,11 +48,15 @@ Persona* RandomPerson()
    
    char * nombre = CreateName(i, j);
    
-   char* rut = "20496709-1";
+   char* rut = (char*)malloc(sizeof(char) * 60);
+   strcpy(rut, CreateRut());
 
    char sexo = WhichGender(i);
    
-   int edad = rut_a_edad(rut)
+   char* tempRut = (char*)malloc(sizeof(char) * 60);
+   strcpy(tempRut, rut);
+   
+   int edad = rut_a_edad(tempRut);
    
    int sindical = RandomRange(0, 1);
    
@@ -74,7 +88,8 @@ Persona* RandomPerson()
    
 }
 
-Accidente* RandomAccidente()
+
+/*Accidente* RandomAccidente()
 {
    int i = RandomRange(0, nAccidentsTypes - 1);
    int j = RandomRange(0, accidentsPerType - 1);
@@ -89,7 +104,7 @@ Accidente* RandomAccidente()
    int lostDays = RandomRange(0,14);
    
    return CrearAccidente(description, accidentType, lostDays, procedure);
-}
+}*/
 
 int main()
 {
@@ -102,7 +117,7 @@ int main()
    
    PrintPersona(person);
    
-   Accidente* accidente = RandomAccidente();
+   //Accidente* accidente = RandomAccidente();
    
-   PrintAccident(accidente);
+   //PrintAccident(accidente);
 }
