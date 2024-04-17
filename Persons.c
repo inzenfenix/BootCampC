@@ -64,7 +64,7 @@ void InitializeNames()
    names[9].name = "Trinidad "; 
    names[9].gender = 'F';  
    names[10].name = "Mauricio Alex "; 
-   names[10].gender = 'F';   
+   names[10].gender = 'M';   
    
    lastNames[0] = "Fernandez";
    lastNames[1] = "Gomez";
