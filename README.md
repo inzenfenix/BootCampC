@@ -9,3 +9,4 @@
 4. Obtener datos persona x (ficha completa):
 5. Obtener listado de personas
 6. Edad con más accidentes (con sus variaciones respectivas)
+7. cantidad de incidentes (accidentes sin días perdidos)
