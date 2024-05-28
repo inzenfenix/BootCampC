@@ -8,3 +8,4 @@
 3. Filtro (1)+(2)
 4. Obtener datos persona x (ficha completa):
 5. Obtener listado de personas
+6. Edad con más accidentes (con sus variaciones respectivas)
