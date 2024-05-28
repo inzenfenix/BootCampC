@@ -7,7 +7,7 @@ from subprocess import PIPE, Popen
 
 class GetSimuladorDataView(views.APIView):
     def get(self,request):
-        ruta = "/home/shadom/Documents/GitHub/Simulador/Core/web/bin/"
+        ruta = "/home/shadom/Documents/GitHub/BootCampC/Simulador/Core/web/bin/"
         comando = "FinalRandomizer"
         res = self.__exec(ruta,comando)
         return Response(js.dumps(res))
