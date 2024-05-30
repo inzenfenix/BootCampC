@@ -21,4 +21,5 @@ from web import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('simulador/', views.GetSimuladorDataView.as_view(),name='Simulador'),
+    path('funcion_x', views.funcion_x.as_view(),name='funcion_x'),
 ]
