@@ -33,20 +33,14 @@ Persona* CrearPersona(char *nombre,char *rut,char sexo,int edad,
 
 void PrintPersona(Persona* person)
 {
-   printf("\nNombre: %s\n", person->nombre);
-   printf("\nRut: %s\n", person->rut);
-   printf("\nEdad: %d\n", person->edad);
-   printf("\nSexo: %c\n", person->sexo);
-   printf("\nSindical: %d\n", person->sindical);
-   printf("\nEmbarazada: %d\n", person->embarazada);
+   printf("%s,%s,%d,%c,%d,%d,", person->nombre,person->rut,person->edad,person->sexo,person->sindical,person->embarazada);
+
 }
 
 void PrintAccident(Accidente* accident)
 {
-   printf("\nDescripcion: %s\n", accident->descripcion);
-   printf("\nContexto: %s\n", accident->contexto);
-   printf("\nDias Perdidos: %d\n", accident->diasPerdidos);
-   printf("\nProcedimiento Aplicado: %d\n", accident->procedimientoAplicado);
+   printf("%s,%s,%d,%d**\n", accident->descripcion,accident->contexto,accident->diasPerdidos,accident->procedimientoAplicado);
+
 }
 
 Accidente* CrearAccidente(char* descripcion, char* contexto, int diasPerdidos, int procedimientoAplicado) 
@@ -76,13 +70,13 @@ void PrintAccidents(Accidente* accidents, int accidenteActual)
 {
    if(accidents == NULL)
    {
-      printf("\nFin Accidentes\n");
+
       return;
    }
    
-   printf("\n**** ACCIDENTE %d: ****\n", accidenteActual);
+   printf("**");
    PrintAccident(accidents);
-   printf("\n**** FIN ACCIDENTE %d: ****\n", accidenteActual);
+   
    
    PrintAccidents(accidents->siguiente , ++accidenteActual);
 }

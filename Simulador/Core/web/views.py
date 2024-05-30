@@ -25,14 +25,14 @@ class GetSimuladorDataView(views.APIView):
             if len(datos) > 1:
                 print(datos[1])
                 persona = Persona()
-                persona.id = datos[0]
-                persona.nombre = datos[1] 
-                persona.rut = datos[2]
+                #persona.id = 
+                persona.nombre = datos[0] 
+                persona.rut = datos[1]
+                persona.edad= datos[2]
                 persona.sexo = datos[3]
-                persona.edad= datos[4]
-                persona.embarazo = datos[5]
-                persona.sindical = datos[6]
-                persona.Accidentes = datos[7]
+                persona.embarazo = datos[4]
+                persona.sindical = datos[5]
+                #persona.Accidentes = 
                 persona.save()   
         return Response(js.dumps(results))
         
