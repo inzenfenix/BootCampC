@@ -20,9 +20,8 @@ class GetSimuladorDataView(views.APIView):
         ruta = "/home/shadom/Documents/GitHub/BootCampC/Simulador/Core/web/bin/"
         comando = "FinalRandomizer"
         results = self.__exec(ruta,comando).split("\n")
-        print(results)
-        for datos in results:
-            print(datos)
+        for r in results:
+            datos = r.split(',')
             if len(datos) > 1:
                 print(datos[1])
                 persona = Persona()
