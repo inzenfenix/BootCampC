@@ -113,6 +113,7 @@ int main()
    InitializeAccidents();
    InitializeNames();
    
+   for (int i = 0;i<100;i++){
    Persona* person = RandomPerson();
    
    PrintPersona(person);
@@ -132,6 +133,8 @@ int main()
    }
    
    PrintAccidents(person->listaAccidentes, 1);
+   printf("/n");
+   }
    
 
 }
