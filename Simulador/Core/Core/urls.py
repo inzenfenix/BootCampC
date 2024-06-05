@@ -28,4 +28,5 @@ urlpatterns = [
     path('procedimiento/', views.Get_Accidente_Procedimiento.as_view(),name='procedimiento'), #Servicio 9
     path(f'diasperdidos/<dia1>/<dia2>/', views.Get_Accidente_DiasPerdidos_range.as_view(),name='diasrango'), #Servicio 10.1
     path(f'diasperdidos/<dia>/<condicion>/', views.Get_Accidente_DiasPerdidos.as_view(),name='dias'), #Servicio 10.2
+    path(f'cantidadincidentes/<fecha_inicio>', views.CantidadIncidentes.as_view(),name='Incidentes')
 ]

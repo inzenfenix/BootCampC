@@ -18,7 +18,7 @@ class Persona(models.Model):
     sexo = models.CharField(max_length=1, null=True)
     edad = models.IntegerField(default=0)
     embarazo = models.BooleanField(default=True)
-    sindical = models.BooleanField(default=True)
+    sindical = models.BooleanField(default=False)
     Accidentes = models.ForeignKey(Accidente, on_delete=models.PROTECT, null=True)
     
     def __str__(self):

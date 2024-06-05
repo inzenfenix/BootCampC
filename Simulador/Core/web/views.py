@@ -40,6 +40,12 @@ class AccidentesPorSindical(views.APIView):
         qs2 = [f"Nombre:{persona.nombre}, Accidente:{persona.Accidentes.descripcion}" for persona in qs]
         return Response(qs2)
     
+#Propuesta Servicio: Cantidad de Incidentes
+class CantidadIncidentes(views.APIView):
+    def get(self,request, fecha_inicio):
+        fecha_inicio = timezone.datetime.strptime(fecha_inicio, "%Y-%m-%d")  
+        qi = Accidente.objects.filter(dias_perdidos=0, fecha__gte=fecha_inicio).count() #gte=greater than pa no olvidarme
+        return Response(f'Desde {fecha_inicio} han habido {qi} incidentes.')
 
     
 
