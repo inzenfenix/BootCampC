@@ -26,6 +26,16 @@ class Listado_personas(views.APIView): #Servicio 4
         qs2 = [f"{persona}" for persona in qs]
         return Response(qs2)
     
+#Servicio 8
+class AccidentesPorSindical(views.APIView):
+    def get(self,request):
+        qs = Persona.objects.filter(sindical=True).distinct()
+        qs2 = [f"Nombre:{persona.nombre}, Accidente:{persona.Accidentes.descripcion}" for persona in qs]
+        return Response(qs2)
+    
+#Servicio 5
+
+    
 class GetSimuladorDataView(views.APIView):
 
     def post(self,request):
