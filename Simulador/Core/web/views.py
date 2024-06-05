@@ -18,15 +18,13 @@ class Accidentes_entre_fechas(views.APIView):#Servicio 2
             hasta = timezone.datetime.strptime(f'{hasta}-1-1', "%Y-%m-%d")
 
         qs = Persona.objects.filter(Accidentes__fecha__range=(desde, hasta)).distinct().count()
-        return Response(f'Hay :{qs} accidentes entre {desde} y {hasta}.')
+        return Response(f'Hay {qs} accidentes entre {desde} y {hasta}.')
     
 class Listado_personas(views.APIView): #Servicio 4
     def get(self,request):
         qs = Persona.objects.values_list('nombre',flat=True)
-        qs2 = [f"Nombre : {persona}\n" for persona in qs]
+        qs2 = [f"{persona}" for persona in qs]
         return Response(qs2)
-
-
     
 class GetSimuladorDataView(views.APIView):
 
