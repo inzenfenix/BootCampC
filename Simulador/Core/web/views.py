@@ -8,8 +8,8 @@ from subprocess import PIPE, Popen
 from .models import Accidente
 from .models import Persona
 
-
-class Accidentes_entre_fechas(views.APIView):#Servicio 2
+#Servicio 2
+class Accidentes_entre_fechas(views.APIView):
     def get(self,request,desde,hasta):
 
         if len(desde.split('-')) == 1:
@@ -19,8 +19,9 @@ class Accidentes_entre_fechas(views.APIView):#Servicio 2
 
         qs = Persona.objects.filter(Accidentes__fecha__range=(desde, hasta)).distinct().count()
         return Response(f'Hay {qs} accidentes entre {desde} y {hasta}.')
-    
-class Listado_personas(views.APIView): #Servicio 4
+ 
+ #Servicio 4   
+class Listado_personas(views.APIView): 
     def get(self,request):
         qs = Persona.objects.values_list('nombre',flat=True)
         qs2 = [f"{persona}" for persona in qs]
@@ -40,23 +41,24 @@ class AccidentesPorSindical(views.APIView):
         qs2 = [f"Nombre:{persona.nombre}, Accidente:{persona.Accidentes.descripcion}" for persona in qs]
         return Response(qs2)
     
-
-
-class Get_Accidente_Procedimiento(views.APIView): # Servicio 9
+# Servicio 9
+class Get_Accidente_Procedimiento(views.APIView): 
     def get(self, request):
         qs = Persona.objects.all()
         qs_r = [x for x in qs if x.Accidentes.procedimiento_aplicado == 1] # persona => accidente => procedimiento_aplicado
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
 
-class Get_Accidente_DiasPerdidos_range(views.APIView): # Servicio 10_v1
+# Servicio 10_v1
+class Get_Accidente_DiasPerdidos_range(views.APIView): 
     def get(self, request, dia1, dia2): #dia1 = rango inferior, dia2 = rango superior
         qs = Persona.objects.all() 
         qs_r = [x for x in qs if x.Accidentes.dias_perdidos > int(dia1) and x.Accidentes.dias_perdidos < int(dia2)]
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
 
-class Get_Accidente_DiasPerdidos(views.APIView): # Servicio 10_v2 **funca mal usar el 10_v1
+# Servicio 10_v2 **funca mal usar el 10_v1
+class Get_Accidente_DiasPerdidos(views.APIView): 
     def get(self, request, dia, condicion): # condicion => menor,mayor o igual (cualquier cosa => igual)
         qs = Persona.objects.all()
         if (condicion == 'mayor'):
