@@ -94,7 +94,12 @@ class Fecha_sexo_embarazo(views.APIView): #Servicio 12
         result = [x for x in qs if x.Accidentes.fecha == fecha and x.sexo == sexo and x.embarazo == True]
         qs_json = serializers.serialize('json', qs)
         return HttpResponse(qs_json, content_type='application/json')
-    
+
+#Servicio 14
+class AccidenteEmbarazoDiasPerdidos(views.APIView):
+    def get(self, request, dias):
+        return HttpResponse(serializers.serialize('json',[persona for persona in Persona.objects.all() if persona.embarazo == True and persona.Accidente.dias_perdidos == dias]), content_type='application/json')
+
 #Servicio 15
 class AccidenteSindicalProcedimiento(views.APIView):
     def get(self,request):
