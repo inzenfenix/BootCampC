@@ -23,8 +23,9 @@ urlpatterns = [
     path('simulador/', views.GetSimuladorDataView.as_view(),name='Simulador'),
     path(f'entre/<desde>/<hasta>/', views.Accidentes_entre_fechas.as_view(),name='Entre anos'), #Servicio 2
     path('Nombres',views.Listado_personas.as_view(),name='Nombres'), #Servicio 4
+    path('AccidentesPorSexo/',views.AccidentesPorSexo.as_view(),name='Accidentes Por Sexo'),
     path('AccidentesSindical/',views.AccidentesPorSindical.as_view(),name='Accidentes Por Sindical'), #Servicio 8
     path('procedimiento/', views.Get_Accidente_Procedimiento.as_view(),name='procedimiento'), #Servicio 9
-    path('diasperdidos/<dia1>/<dia2">/', views.Get_Accidente_DiasPerdidos_range.as_view(),name='diasrango'), #Servicio 10.1
-    path('diasperdidos/<dia>/<condicion>/', views.Get_Accidente_DiasPerdidos.as_view(),name='dias'), #Servicio 10.2
+    path(f'diasperdidos/<dia1>/<dia2>/', views.Get_Accidente_DiasPerdidos_range.as_view(),name='diasrango'), #Servicio 10.1
+    path(f'diasperdidos/<dia>/<condicion>/', views.Get_Accidente_DiasPerdidos.as_view(),name='dias'), #Servicio 10.2
 ]

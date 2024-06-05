@@ -25,7 +25,14 @@ class Listado_personas(views.APIView): #Servicio 4
         qs = Persona.objects.values_list('nombre',flat=True)
         qs2 = [f"{persona}" for persona in qs]
         return Response(qs2)
-    
+
+#Servicio 5
+class AccidentesPorSexo(views.APIView):
+    def get(self,request):
+        qsM = Persona.objects.filter(sexo="M").count()
+        qsF = Persona.objects.filter(sexo="F").count()
+        return Response(f"Los hombres tuvieron: {qsM} accidentes y las mujeres: {qsF}") 
+
 #Servicio 8
 class AccidentesPorSindical(views.APIView):
     def get(self,request):
@@ -33,7 +40,8 @@ class AccidentesPorSindical(views.APIView):
         qs2 = [f"Nombre:{persona.nombre}, Accidente:{persona.Accidentes.descripcion}" for persona in qs]
         return Response(qs2)
     
-#Servicio 5
+
+    
 
 class Get_Accidente_Procedimiento(views.APIView): # Servicio 9
     def get(self, request):
@@ -44,20 +52,20 @@ class Get_Accidente_Procedimiento(views.APIView): # Servicio 9
 
 class Get_Accidente_DiasPerdidos_range(views.APIView): # Servicio 10_v1
     def get(self, request, dia1, dia2): #dia1 = rango inferior, dia2 = rango superior
-        qs = Persona.object.all() 
-        qs_r = [x for x in qs if x.Accidentes.dias_perdidos > dia1 and x.Accidentes.dias_perdidos < dia2]
+        qs = Persona.objects.all() 
+        qs_r = [x for x in qs if x.Accidentes.dias_perdidos > int(dia1) and x.Accidentes.dias_perdidos < int(dia2)]
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
 
-class Get_Accidente_DiasPerdidos(views.APIView): # Servicio 10_v2
+class Get_Accidente_DiasPerdidos(views.APIView): # Servicio 10_v2 **funca mal usar el 10_v1
     def get(self, request, dia, condicion): # condicion => menor,mayor o igual (cualquier cosa => igual)
         qs = Persona.objects.all()
         if (condicion == 'mayor'):
-            qs_r = [x for x in qs if x.Accidentes.dias_perdidos > dia]
+            qs_r = [x for x in qs if x.Accidentes.dias_perdidos > int(dia)]
         elif (condicion == 'menor'): # retornara el dia y sus 
-            qs_r = [x for x in qs if x.Accidentes.dias_perdidos < dia]
+            qs_r = [x for x in qs if x.Accidentes.dias_perdidos < int(dia)]
         else:
-            qs_r = [x for x in qs if x.Accidentes.dias_perdidos == dia]
+            qs_r = [x for x in qs if x.Accidentes.dias_perdidos == int(dia)]
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
     
