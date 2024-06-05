@@ -20,12 +20,20 @@ class Accidentes_entre_fechas(views.APIView):
         qs = Persona.objects.filter(Accidentes__fecha__range=(desde, hasta)).distinct().count()
         return Response(f'Hay {qs} accidentes entre {desde} y {hasta}.')
  
+class Datos_ficha(views.APIView): #Servicio 3
+    def get(self, request, nombre):
+        qs = Persona.object.all()
+        result = [x for x in qs if x.nombre == nombre]
+        qs_json = serializers.serialize('json', qs)
+        return HttpResponse(qs_json, content_type='application/json')
+    
  #Servicio 4   
 class Listado_personas(views.APIView): 
     def get(self,request):
         qs = Persona.objects.values_list('nombre',flat=True)
         qs2 = [f"{persona}" for persona in qs]
         return Response(qs2)
+    
 
 #Servicio 5
 class AccidentesPorSexo(views.APIView):
@@ -50,6 +58,13 @@ class AccidentesPorSexo(views.APIView):
 
 '''
 
+class Accidentes_edad(views.APIView): #Servicio 7
+    def get(self, request, Edad):
+        qs = Persona.object.all()
+        result = [x for x in qs if x.edad == Edad]
+        qs_json = serializers.serialize('json', qs)
+        return HttpResponse(qs_json, content_type='application/json')
+
 #Servicio 8
 class AccidentesPorSindical(views.APIView):
     def get(self,request):
@@ -71,6 +86,13 @@ class Get_Accidente_DiasPerdidos(views.APIView):
         qs = Persona.objects.all() 
         qs_r = [x for x in qs if x.Accidentes.dias_perdidos > int(dia1) and x.Accidentes.dias_perdidos < int(dia2)]
         qs_json = serializers.serialize('json', qs_r)
+        return HttpResponse(qs_json, content_type='application/json')
+    
+class Fecha_sexo_embarazo(views.APIView): #Servicio 12
+    def get(self, request, fecha, sexo):
+        qs = Persona.object.all()
+        result = [x for x in qs if x.Accidentes.fecha == fecha and x.sexo == sexo and x.embarazo == True]
+        qs_json = serializers.serialize('json', qs)
         return HttpResponse(qs_json, content_type='application/json')
     
 #Servicio 15
