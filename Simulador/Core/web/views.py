@@ -61,28 +61,15 @@ class AccidentesPorSindical(views.APIView):
 class Get_Accidente_Procedimiento(views.APIView): 
     def get(self, request):
         qs = Persona.objects.all()
-        qs_r = [x for x in qs if x.Accidentes.procedimiento_aplicado == 1] # persona => accidente => procedimiento_aplicado
+        qs_r = [x for x in qs if x.Accidentes.procedimiento_aplicado == True] # persona => accidente => procedimiento_aplicado
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
 
-# Servicio 10_v1
-class Get_Accidente_DiasPerdidos_range(views.APIView): 
+# Servicio 10
+class Get_Accidente_DiasPerdidos(views.APIView): 
     def get(self, request, dia1, dia2): #dia1 = rango inferior, dia2 = rango superior
         qs = Persona.objects.all() 
         qs_r = [x for x in qs if x.Accidentes.dias_perdidos > int(dia1) and x.Accidentes.dias_perdidos < int(dia2)]
-        qs_json = serializers.serialize('json', qs_r)
-        return HttpResponse(qs_json, content_type='application/json')
-
-# Servicio 10_v2 **funca mal usar el 10_v1
-class Get_Accidente_DiasPerdidos(views.APIView): 
-    def get(self, request, dia, condicion): # condicion => menor,mayor o igual (cualquier cosa => igual)
-        qs = Persona.objects.all()
-        if (condicion == 'mayor'):
-            qs_r = [x for x in qs if x.Accidentes.dias_perdidos > int(dia)]
-        elif (condicion == 'menor'): # retornara el dia y sus 
-            qs_r = [x for x in qs if x.Accidentes.dias_perdidos < int(dia)]
-        else:
-            qs_r = [x for x in qs if x.Accidentes.dias_perdidos == int(dia)]
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
     
