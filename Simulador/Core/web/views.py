@@ -24,7 +24,7 @@ class Datos_ficha(views.APIView): #Servicio 3
     def get(self, request, nombre):
         qs = Persona.object.all()
         result = [x for x in qs if x.nombre == nombre]
-        qs_json = serializers.serialize('json', qs)
+        qs_json = serializers.serialize('json', result)
         return HttpResponse(qs_json, content_type='application/json')
     
  #Servicio 4   
