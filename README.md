@@ -20,3 +20,5 @@
 - [ ] (13)Accidentes x sexo x embarazo x edad
 - [ ] (14)Accidentes x sexo x embarazo x días perdidos
 - [ ] (15)Accidentes x sindical x procedimiento
+
+- [x] (16?)Cantidad de incidentes desde una cierta fecha

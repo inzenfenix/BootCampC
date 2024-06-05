@@ -33,6 +33,22 @@ class AccidentesPorSexo(views.APIView):
         qsM = Persona.objects.filter(sexo="M").count()
         qsF = Persona.objects.filter(sexo="F").count()
         return Response(f"Los hombres tuvieron: {qsM} accidentes y las mujeres: {qsF}") 
+    
+    
+#Idea de cambio para una mejor presentación
+'''
+
+class AccidentesPorSexo(views.APIView):
+    def get(self,request):
+        qsM = Persona.objects.filter(sexo="M").count()
+        qsF = Persona.objects.filter(sexo="F").count()
+        response_text = (
+            f"Los hombres tuvieron: {qsM} accidentes\n"
+            f"y las mujeres: {qsF} accidentes"
+        )
+        return Response(response_text)
+
+'''
 
 #Servicio 8
 class AccidentesPorSindical(views.APIView):
@@ -70,6 +86,18 @@ class Get_Accidente_DiasPerdidos(views.APIView):
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
     
+#Servicio 15
+class AccidenteSindicalProcedimiento(views.APIView):
+    def get(self,request):
+        qs = Persona.objects.filter(sindical=True).distinct()
+        qs2 = []
+        for persona in qs:
+            accidentes_persona = persona.accidentes.filter(procedimiento_aplicado=True)
+            for accidente in accidentes_persona:
+                qs2.append(f"Nombre:{persona.nombre}, Accidente:{accidente.descripcion}")
+        return Response(qs2)   
+    
+    
 #Propuesta Servicio: Cantidad de Incidentes
 class CantidadIncidentes(views.APIView):
     def get(self,request, fecha_inicio):
@@ -77,7 +105,7 @@ class CantidadIncidentes(views.APIView):
         qi = Accidente.objects.filter(dias_perdidos=0, fecha__gte=fecha_inicio).count() #gte=greater than pa no olvidarme
         return Response(f'Desde {fecha_inicio} han habido {qi} incidentes.')
 
-    
+
     
 class GetSimuladorDataView(views.APIView):
 
