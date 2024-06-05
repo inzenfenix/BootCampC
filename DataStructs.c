@@ -1,4 +1,5 @@
 #include "DataStructs.h"
+#include "Fecha.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -72,8 +73,9 @@ void PrintAccidents(Accidente* accidents, int accidenteActual)
 
       return;
    }
-   
+   Fecha* fecha = RandomFecha(2000,2025);
    PrintAccident(accidents);
+   printFecha(fecha);
    
    
    PrintAccidents(accidents->siguiente , ++accidenteActual);

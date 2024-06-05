@@ -2,18 +2,31 @@ from rest_framework import views
 from rest_framework.response import Response
 from django.core import serializers
 from django.http import HttpResponse
+from django.utils import timezone
 import json as js
 from subprocess import PIPE, Popen
 from .models import Accidente
 from .models import Persona
 
 
-class Accidentes_entre_anos(views.APIView):
+class Accidentes_entre_fechas(views.APIView):#Servicio 2
+    def get(self,request,desde,hasta):
+
+        if len(desde.split('-')) == 1:
+            desde = timezone.datetime.strptime(f'{desde}-1-1', "%Y-%m-%d")
+        if len(hasta.split('-')) == 1:
+            hasta = timezone.datetime.strptime(f'{hasta}-1-1', "%Y-%m-%d")
+
+        qs = Persona.objects.filter(Accidentes__fecha__range=(desde, hasta)).distinct().count()
+        return Response(f'Hay :{qs} accidentes entre {desde} y {hasta}.')
+    
+class Listado_personas(views.APIView): #Servicio 4
     def get(self,request):
-        ruta = "/home/shadom/Documents/GitHub/BootCampC/Simulador/Core/web/bin/"
-        comando = "FinalRandomizer"
-        res = self.__exec(ruta,comando)
-        return Response(js.dumps(res))
+        qs = Persona.objects.values_list('nombre',flat=True)
+        qs2 = [f"Nombre : {persona}\n" for persona in qs]
+        return Response(qs2)
+
+
     
 class GetSimuladorDataView(views.APIView):
 
@@ -24,20 +37,22 @@ class GetSimuladorDataView(views.APIView):
         nombres_personas = set([nombre.nombre for nombre in Persona.objects.all()])
         for r in results:
             datos = r.split(',')
-            print(datos)
             if datos == ['']:
                 continue
-
             if len(datos) > 1:
                 for accidentes in datos[6].split('//'):
                     datos_accidente = accidentes.split('*')
+                    print(datos_accidente)
                     if len(datos_accidente) > 1:
                         accidente = Accidente()
                         accidente.descripcion = datos_accidente[0].strip('/')
                         accidente.contexto = datos_accidente[1]
                         accidente.dias_perdidos = datos_accidente[2]
                         accidente.procedimiento_aplicado = datos_accidente[3]
-                        accidente.fecha = datos_accidente[4].strip('/')
+                        print(datos_accidente[4].strip('/'))
+                        if len(datos_accidente[4].split('-')) == 3:
+                            accidente.fecha = datos_accidente[4].strip('/')
+
 
                         if accidente not in Accidente.objects.all():
                             accidente.save()

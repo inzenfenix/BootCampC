@@ -4,7 +4,7 @@ class Accidente(models.Model):
     id = models.AutoField(primary_key=True)
     descripcion = models.CharField(max_length=10, null=True)
     contexto = models.CharField(max_length=10, null=True)   
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField(auto_now_add=False)
     procedimiento_aplicado = models.BooleanField(default=True)
     dias_perdidos = models.IntegerField(default=0)
 
@@ -23,4 +23,3 @@ class Persona(models.Model):
     
     def __str__(self):
         return f'{self.id}: ,Nombre:{self.nombre} ,Rut:{self.rut} ,Sexo:{self.sexo} ,Edad:{self.edad} ,Embarazo:{self.embarazo} ,Estado Sindical:{self.sindical}'
-

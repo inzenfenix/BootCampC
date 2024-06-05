@@ -8,7 +8,6 @@
 #include "Accidents.h"
 #include "Persons.h"
 #include "RutRandomizer.h"
-#include "Fecha.c"
 
 
 float RandomRangeF(float min, float max)
@@ -115,7 +114,7 @@ int main()
    InitializeNames();
    
    for (int i = 0;i<100;i++){
-   Fecha* fecha = RandomFecha(2000,2025);
+   
    Persona* person = RandomPerson();
    
    PrintPersona(person);
@@ -135,9 +134,9 @@ int main()
    }
    
    PrintAccidents(person->listaAccidentes, 1);
-   
-   printFecha(fecha);
    printf("/n");
+   
+   
    }
    
 

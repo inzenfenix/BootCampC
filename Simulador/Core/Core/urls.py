@@ -21,5 +21,6 @@ from web import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('simulador/', views.GetSimuladorDataView.as_view(),name='Simulador'),
-    #path(f'{desde}/{hasta}/', views.Accidentes_entre_anos.as_view(),name='Entre anos'),
+    path(f'entre/<desde>/<hasta>/', views.Accidentes_entre_fechas.as_view(),name='Entre anos'), #Servicio 2
+    path('Nombres',views.Listado_personas.as_view(),name='Nombres'), #Servicio 4
 ]

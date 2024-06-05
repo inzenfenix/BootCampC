@@ -46,5 +46,5 @@ Fecha* RandomFecha(int anio_inicial, int anio_final) {
 }
 
 void printFecha(Fecha* fecha) {
-    printf("%d-%d-%d/", fecha->dia, fecha->mes, fecha->anio);
+    printf("%d-%d-%d/", fecha->anio, fecha->mes, fecha->dia);
 }
