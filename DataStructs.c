@@ -39,7 +39,7 @@ void PrintPersona(Persona* person)
 
 void PrintAccident(Accidente* accident)
 {
-   printf("%s,%s,%d,%d**", accident->descripcion,accident->contexto,accident->diasPerdidos,accident->procedimientoAplicado);
+   printf("/%s*%s*%d*%d/", accident->descripcion,accident->contexto,accident->diasPerdidos,accident->procedimientoAplicado);
 
 }
 
@@ -74,7 +74,6 @@ void PrintAccidents(Accidente* accidents, int accidenteActual)
       return;
    }
    
-   printf("**");
    PrintAccident(accidents);
    
    

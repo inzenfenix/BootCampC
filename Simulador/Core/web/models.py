@@ -1,6 +1,6 @@
 from django.db import models
 
-class Accidente_por_persona(models.Model):
+class Accidente(models.Model):
     id = models.AutoField(primary_key=True)
     descripcion = models.CharField(max_length=10, null=True)
     contexto = models.CharField(max_length=10, null=True)   
@@ -19,7 +19,7 @@ class Persona(models.Model):
     edad = models.IntegerField(default=0)
     embarazo = models.BooleanField(default=True)
     sindical = models.BooleanField(default=True)
-    Accidentes = models.ForeignKey(Accidente_por_persona, on_delete=models.PROTECT, null=True)
+    Accidentes = models.ForeignKey(Accidente, on_delete=models.PROTECT, null=True)
     
     def __str__(self):
         return f'{self.id}: ,Nombre:{self.nombre} ,Rut:{self.rut} ,Sexo:{self.sexo} ,Edad:{self.edad} ,Embarazo:{self.embarazo} ,Estado Sindical:{self.sindical} ,Accidente_por_personas {self.Accidentes}'
