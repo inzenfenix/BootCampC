@@ -8,7 +8,7 @@ from .models import Accidente
 from .models import Persona
 
 
-class funcion_x(views.APIView):
+class Accidentes_entre_anos(views.APIView):
     def get(self,request):
         ruta = "/home/shadom/Documents/GitHub/BootCampC/Simulador/Core/web/bin/"
         comando = "FinalRandomizer"
@@ -36,7 +36,8 @@ class GetSimuladorDataView(views.APIView):
                         accidente.descripcion = datos_accidente[0].strip('/')
                         accidente.contexto = datos_accidente[1]
                         accidente.dias_perdidos = datos_accidente[2]
-                        accidente.procedimiento_aplicado = datos_accidente[3].strip('/')
+                        accidente.procedimiento_aplicado = datos_accidente[3]
+                        accidente.fecha = datos_accidente[4].strip('/')
 
                         if accidente not in Accidente.objects.all():
                             accidente.save()

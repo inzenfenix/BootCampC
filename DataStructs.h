@@ -21,7 +21,6 @@ struct Accidente {
     ocurrencia de un accidente del trabajo” que se puede cumplir o no, esto varia de oficina 
     a oficina y puede llenarse con un "si","no" o "En proceso". esto ultimo pasa cuando 
     sucede en diciembre y las investigaciones no terminan de pasar*/
-
     
     Accidente* siguiente;
 };

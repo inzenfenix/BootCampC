@@ -22,5 +22,5 @@ class Persona(models.Model):
     Accidentes = models.ForeignKey(Accidente, on_delete=models.PROTECT, null=True)
     
     def __str__(self):
-        return f'{self.id}: ,Nombre:{self.nombre} ,Rut:{self.rut} ,Sexo:{self.sexo} ,Edad:{self.edad} ,Embarazo:{self.embarazo} ,Estado Sindical:{self.sindical} ,Accidente_por_personas {self.Accidentes}'
+        return f'{self.id}: ,Nombre:{self.nombre} ,Rut:{self.rut} ,Sexo:{self.sexo} ,Edad:{self.edad} ,Embarazo:{self.embarazo} ,Estado Sindical:{self.sindical}'
 

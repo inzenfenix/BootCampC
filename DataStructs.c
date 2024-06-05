@@ -1,7 +1,6 @@
 #include "DataStructs.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
 
 
@@ -39,7 +38,7 @@ void PrintPersona(Persona* person)
 
 void PrintAccident(Accidente* accident)
 {
-   printf("/%s*%s*%d*%d/", accident->descripcion,accident->contexto,accident->diasPerdidos,accident->procedimientoAplicado);
+   printf("/%s*%s*%d*%d*", accident->descripcion,accident->contexto,accident->diasPerdidos,accident->procedimientoAplicado);
 
 }
 
