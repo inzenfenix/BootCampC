@@ -40,14 +40,7 @@ class AccidentesPorSindical(views.APIView):
         qs2 = [f"Nombre:{persona.nombre}, Accidente:{persona.Accidentes.descripcion}" for persona in qs]
         return Response(qs2)
     
-#Propuesta Servicio: Cantidad de Incidentes
-class CantidadIncidentes(views.APIView):
-    def get(self,request, fecha_inicio):
-        fecha_inicio = timezone.datetime.strptime(fecha_inicio, "%Y-%m-%d")  
-        qi = Accidente.objects.filter(dias_perdidos=0, fecha__gte=fecha_inicio).count() #gte=greater than pa no olvidarme
-        return Response(f'Desde {fecha_inicio} han habido {qi} incidentes.')
 
-    
 
 class Get_Accidente_Procedimiento(views.APIView): # Servicio 9
     def get(self, request):
@@ -74,6 +67,15 @@ class Get_Accidente_DiasPerdidos(views.APIView): # Servicio 10_v2 **funca mal us
             qs_r = [x for x in qs if x.Accidentes.dias_perdidos == int(dia)]
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
+    
+#Propuesta Servicio: Cantidad de Incidentes
+class CantidadIncidentes(views.APIView):
+    def get(self,request, fecha_inicio):
+        fecha_inicio = timezone.datetime.strptime(fecha_inicio, "%Y-%m-%d")  
+        qi = Accidente.objects.filter(dias_perdidos=0, fecha__gte=fecha_inicio).count() #gte=greater than pa no olvidarme
+        return Response(f'Desde {fecha_inicio} han habido {qi} incidentes.')
+
+    
     
 class GetSimuladorDataView(views.APIView):
 
