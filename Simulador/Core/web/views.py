@@ -7,6 +7,8 @@ import json as js
 from subprocess import PIPE, Popen
 from .models import Accidente
 from .models import Persona
+from os import getcwd
+
 
 #Servicio 2
 class Accidentes_entre_fechas(views.APIView):
@@ -124,7 +126,8 @@ class CantidadIncidentes(views.APIView):
 class GetSimuladorDataView(views.APIView):
 
     def post(self,request):
-        ruta = "/home/shadom/Documents/GitHub/BootCampC/Simulador/Core/web/bin/"
+        ruta = getcwd() + "bin/"
+        #ruta = "/home/fenih/Documents/GitHub/BootCampC/Simulador/Core/web/"
         comando = "FinalRandomizer"
         results = self.__exec(ruta,comando).split("/n")
         nombres_personas = set([nombre.nombre for nombre in Persona.objects.all()])
