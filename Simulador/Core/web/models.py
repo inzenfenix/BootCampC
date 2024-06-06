@@ -23,3 +23,4 @@ class Persona(models.Model):
     
     def __str__(self):
         return f'{self.id}: ,Nombre:{self.nombre} ,Rut:{self.rut} ,Sexo:{self.sexo} ,Edad:{self.edad} ,Embarazo:{self.embarazo} ,Estado Sindical:{self.sindical}'
+

@@ -21,14 +21,17 @@ class Accidentes_entre_fechas(views.APIView):
 
         qs = Persona.objects.filter(Accidentes__fecha__range=(desde, hasta)).distinct().count()
         return Response(f'Hay {qs} accidentes entre {desde} y {hasta}.')
- 
-class Datos_ficha(views.APIView): #Servicio 3
+    
+
+ #Servicio 3
+class Datos_ficha(views.APIView): 
     def get(self, request, nombre):
         qs = Persona.object.all()
         result = [x for x in qs if x.nombre == nombre]
         qs_json = serializers.serialize('json', result)
         return HttpResponse(qs_json, content_type='application/json')
     
+
  #Servicio 4   
 class Listado_personas(views.APIView): 
     def get(self,request):
@@ -42,30 +45,20 @@ class AccidentesPorSexo(views.APIView):
     def get(self,request):
         qsM = Persona.objects.filter(sexo="M").count()
         qsF = Persona.objects.filter(sexo="F").count()
-        return Response(f"Los hombres tuvieron: {qsM} accidentes y las mujeres: {qsF}") 
-    
-    
-#Idea de cambio para una mejor presentación
-'''
-
-class AccidentesPorSexo(views.APIView):
-    def get(self,request):
-        qsM = Persona.objects.filter(sexo="M").count()
-        qsF = Persona.objects.filter(sexo="F").count()
         response_text = (
             f"Los hombres tuvieron: {qsM} accidentes\n"
             f"y las mujeres: {qsF} accidentes"
         )
         return Response(response_text)
 
-'''
-
-class Accidentes_edad(views.APIView): #Servicio 7
-    def get(self, request, Edad):
+#servicio 7
+class Accidentes_edad(views.APIView): 
+    def get(self, request, edad):
         qs = Persona.object.all()
-        result = [x for x in qs if x.edad == Edad]
-        qs_json = serializers.serialize('json', qs)
+        result = [x for x in qs if x.edad == edad]
+        qs_json = serializers.serialize('json', result)
         return HttpResponse(qs_json, content_type='application/json')
+
 
 #Servicio 8
 class AccidentesPorSindical(views.APIView):
@@ -73,7 +66,8 @@ class AccidentesPorSindical(views.APIView):
         qs = Persona.objects.filter(sindical=True).distinct()
         qs2 = [f"Nombre:{persona.nombre}, Accidente:{persona.Accidentes.descripcion}" for persona in qs]
         return Response(qs2)
-    
+
+
 # Servicio 9
 class Get_Accidente_Procedimiento(views.APIView): 
     def get(self, request):
@@ -81,6 +75,7 @@ class Get_Accidente_Procedimiento(views.APIView):
         qs_r = [x for x in qs if x.Accidentes.procedimiento_aplicado == True] # persona => accidente => procedimiento_aplicado
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
+
 
 # Servicio 10
 class Get_Accidente_DiasPerdidos(views.APIView): 
@@ -90,17 +85,21 @@ class Get_Accidente_DiasPerdidos(views.APIView):
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
     
-class Fecha_sexo_embarazo(views.APIView): #Servicio 12
+
+#Servicio 12
+class Fecha_sexo_embarazo(views.APIView): 
     def get(self, request, fecha, sexo):
         qs = Persona.object.all()
         result = [x for x in qs if x.Accidentes.fecha == fecha and x.sexo == sexo and x.embarazo == True]
-        qs_json = serializers.serialize('json', qs)
+        qs_json = serializers.serialize('json', result)
         return HttpResponse(qs_json, content_type='application/json')
+
 
 #Servicio 14
 class AccidenteEmbarazoDiasPerdidos(views.APIView):
     def get(self, request, dias):
         return HttpResponse(serializers.serialize('json',[persona for persona in Persona.objects.all() if persona.embarazo == True and persona.Accidente.dias_perdidos == dias]), content_type='application/json')
+
 
 #Servicio 15
 class AccidenteSindicalProcedimiento(views.APIView):
@@ -113,7 +112,7 @@ class AccidenteSindicalProcedimiento(views.APIView):
                 qs2.append(f"Nombre:{persona.nombre}, Accidente:{accidente.descripcion}")
         return Response(qs2)   
     
-    
+
 #Propuesta Servicio: Cantidad de Incidentes
 class CantidadIncidentes(views.APIView):
     def get(self,request, fecha_inicio):
@@ -122,12 +121,12 @@ class CantidadIncidentes(views.APIView):
         return Response(f'Desde {fecha_inicio} han habido {qi} incidentes.')
 
 
-    
+#Post y Get
 class GetSimuladorDataView(views.APIView):
 
     def post(self,request):
-        ruta = getcwd() + "bin/"
-        #ruta = "/home/fenih/Documents/GitHub/BootCampC/Simulador/Core/web/"
+        ruta = getcwd() + "/web/bin/"
+        print(ruta)
         comando = "FinalRandomizer"
         results = self.__exec(ruta,comando).split("/n")
         nombres_personas = set([nombre.nombre for nombre in Persona.objects.all()])
