@@ -3,11 +3,25 @@ from rest_framework.response import Response
 from django.core import serializers
 from django.http import HttpResponse
 from django.utils import timezone
-import json as js
 from subprocess import PIPE, Popen
 from .models import Accidente
 from .models import Persona
 from os import getcwd
+import random
+import json as js
+
+#Funcion que fecha la fecha
+def fechar_fecha(fecha):
+    if len(fecha.split('-')) == 1:
+        fecha = timezone.datetime.strptime(f'{fecha}-1-1', "%Y-%m-%d")
+    
+    elif len(fecha.split('-')) == 2:
+        fecha = timezone.datetime.strptime(f'{fecha}-1', "%Y-%m-%d")
+        
+    else:
+        fecha = timezone.datetime.strptime(fecha, "%Y-%m-%d") 
+
+    return fecha
 
 # Servicio 1
 class Cantidad_Accidente_total(views.APIView):
@@ -35,26 +49,8 @@ class Cantidad_Accidente_total(views.APIView):
 # Servicio 2
 class Accidentes_entre_fechas(views.APIView):
     def get(self,request,desde,hasta):
-
-        if len(desde.split('-')) == 1:
-            desde = timezone.datetime.strptime(f'{desde}-1-1', "%Y-%m-%d")
-        
-        elif len(desde.split('-')) == 2:
-            desde = timezone.datetime.strptime(f'{desde}-1', "%Y-%m-%d")
-        
-        else:
-            desde = timezone.datetime.strptime(desde, "%Y-%m-%d") 
-
-        if len(hasta.split('-')) == 1:
-            hasta = timezone.datetime.strptime(f'{hasta}-1-1', "%Y-%m-%d")
-
-        elif len(hasta.split('-')) == 2:
-            hasta = timezone.datetime.strptime(f'{hasta}-1', "%Y-%m-%d")
-
-        else:
-            hasta = timezone.datetime.strptime(hasta, "%Y-%m-%d")                    
-                                   
-
+        desde = fechar_fecha(desde)
+        hasta = fechar_fecha(hasta)
         qs = Persona.objects.filter(Accidentes__fecha__range=(desde, hasta)).distinct().count()
         return Response(f'Hay {qs} accidentes entre {desde} y {hasta}.')
     
@@ -93,12 +89,11 @@ class Cantidad_Accidentes_embarazo(views.APIView):
         return Response(f'Hay {len(embarazo)} personas que sufrieron accidentes estando embarazadas, esto equivale al {len(embarazo)/len(personas)*100}% de las personas.')
 
 # Servicio 7
-class Accidentes_edad(views.APIView): 
+class Cantidad_Accidentes_edad(views.APIView): 
     def get(self, request, edad):
-        qs = Persona.objects.all()
-        result = [x for x in qs if x.edad == edad]
-        qs_json = serializers.serialize('json', result)
-        return HttpResponse(qs_json, content_type='application/json')
+        personas = Persona.objects.all()
+        result = len([persona for persona in personas if persona.edad == edad])
+        return Response(f'Han ocurrido {result} accidentes a personas de {edad} anos.')
 
 # Servicio 8
 class AccidentesPorSindical(views.APIView):
@@ -110,15 +105,23 @@ class AccidentesPorSindical(views.APIView):
 # Servicio 9
 class Get_Accidente_Procedimiento(views.APIView): 
     def get(self, request):
-        qs = Persona.objects.all()
-        qs_r = [x for x in qs if x.Accidentes.procedimiento_aplicado == True] # persona => accidente => procedimiento_aplicado
+        personas = Persona.objects.all()
+        qs_r = [persona for persona in personas if persona.Accidentes.procedimiento_aplicado] # persona => accidente => procedimiento_aplicado
+        qs_json = serializers.serialize('json', qs_r)
+        return HttpResponse(qs_json, content_type='application/json')
+    
+# Servicio 9.1  Literalmente lo contrario xd    
+class Get_Accidente_No_Procedimiento(views.APIView):
+    def get(self,request):
+        personas = Persona.objects.all()
+        qs_r = [persona for persona in personas if not persona.Accidentes.procedimiento_aplicado] # persona => accidente => procedimiento_aplicado
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
 
 # Servicio 10
 class Get_Accidente_DiasPerdidos(views.APIView): 
     def get(self, request, dia1, dia2): #dia1 = rango inferior, dia2 = rango superior
-        qs = Persona.objects.all()
+        accidentes = Accidente.objects.all()
         if dia1 == 'n':
             dia1 = 0
         else:
@@ -128,18 +131,23 @@ class Get_Accidente_DiasPerdidos(views.APIView):
         else:
             dia2 = int(dia2)
 
-        qs_r = [x for x in qs if x.Accidentes.dias_perdidos >= dia1 and x.Accidentes.dias_perdidos <= dia2]
+        qs_r = [accidente for accidente in accidentes if accidente.dias_perdidos >= dia1 and accidente.dias_perdidos <= dia2]
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
-   
-# Servicio 11
+
+# Servicio 11 Terminar
 class Accidentes_Fecha_Sexo(views.APIView):
     def get(self,request,sexo,desde,hasta):
 
-        if len(desde.split('-')) == 1:
-            desde = timezone.datetime.strptime(f'{desde}-1-1', "%Y-%m-%d")
-        if len(hasta.split('-')) == 1:
-            hasta = timezone.datetime.strptime(f'{hasta}-1-1', "%Y-%m-%d")
+        desde = fechar_fecha(desde)
+        hasta = fechar_fecha(hasta)
+
+# Servicio 11.1 Dice cantidad envez de accidentes
+class Cantidad_Accidentes_Fecha_Sexo(views.APIView):
+    def get(self,request,sexo,desde,hasta):
+
+        desde = fechar_fecha(desde)
+        hasta = fechar_fecha(hasta)
 
         cantidad = Persona.objects.filter(sexo=sexo).filter(Accidentes__fecha__range=(desde, hasta)).count()
 
@@ -151,14 +159,14 @@ class Accidentes_Fecha_Sexo(views.APIView):
         return Response(f'Hay {cantidad} accidentes de {sexo} entre {desde} y {hasta}.')
 
 # Servicio 12
-class Fecha_sexo_embarazo(views.APIView): 
+class Accidentes_Fecha_sexo_embarazo(views.APIView): 
     def get(self, request, fecha, sexo):
-        qs = Persona.objects.all()
-        result = [x for x in qs if x.Accidentes.fecha == fecha and x.sexo == sexo and x.embarazo == True]
+        personas = Persona.objects.all()
+        result = [persona.Accidentes for persona in personas if persona.Accidentes.fecha == fecha and persona.sexo == sexo and persona.embarazo == True]
         qs_json = serializers.serialize('json', result)
         return HttpResponse(qs_json, content_type='application/json')
 
-# Servicio 13
+# Servicio 13 Revisar
 class Accidentes_sexo_embarazo_edad(views.APIView):
     def get(self,request,sexo,edad):
         personas = Persona.objects.filter(sexo=sexo)
@@ -170,7 +178,7 @@ class Accidentes_sexo_embarazo_edad(views.APIView):
             sexo = "Hombres"
 
         return Response(f'Hay {len(personas)} {sexo} con {edad} anos que sufrieron accidentes estando embarazadas.')
-
+    
 # Servicio 14
 class AccidenteEmbarazoDiasPerdidos(views.APIView):
     def get(self, request, dias):
@@ -191,13 +199,21 @@ class AccidenteSindicalProcedimiento(views.APIView):
 class CantidadIncidentes(views.APIView):
     def get(self,request, fecha_inicio):
 
-        if len(fecha_inicio.split('-')) == 1:
-            fecha_inicio = timezone.datetime.strptime(f'{fecha_inicio}-1-1', "%Y-%m-%d")
-        else:
-            fecha_inicio = timezone.datetime.strptime(fecha_inicio, "%Y-%m-%d")
+        fecha_inicio = fechar_fecha(fecha_inicio)
 
-        qi = Accidente.objects.filter(dias_perdidos=0, fecha__gte=fecha_inicio).count() #gte=greater than pa no olvidarme
-        return Response(f'Desde {fecha_inicio} han habido {qi} incidentes.')
+        accidentes = Accidente.objects.filter(dias_perdidos=0, fecha__gte=fecha_inicio).count() #gte=greater than pa no olvidarme
+        return Response(f'Desde {fecha_inicio} han habido {accidentes} incidentes.')
+    
+
+#Propuesta Servicio: Accidentes de una persona
+class Accidentes_nombre(views.APIView):
+    def get(self,request,name):
+        personas = Persona.objects.filter(nombre=name)
+        result = [f'Accidentes de {name}']
+        for persona in personas:
+            result.append(f'Accidente{persona.Accidentes}')
+        return Response(result)
+
 
 #Post y Get
 class GetSimuladorDataView(views.APIView):
@@ -212,29 +228,32 @@ class GetSimuladorDataView(views.APIView):
             datos = r.split(',')
             if datos == ['']:
                 continue
+
             if len(datos) > 1:
                 for accidentes in datos[6].split('//'):
                     datos_accidente = accidentes.split('*')
-                    print(datos_accidente)
                     if len(datos_accidente) > 1:
                         accidente = Accidente()
                         accidente.descripcion = datos_accidente[0].strip('/')
                         accidente.contexto = datos_accidente[1]
                         accidente.dias_perdidos = datos_accidente[2]
                         accidente.procedimiento_aplicado = datos_accidente[3]
-                        print(datos_accidente[4].strip('/'))
                         if len(datos_accidente[4].split('-')) == 3:
                             accidente.fecha = datos_accidente[4].strip('/')
+                        accidente.save()
+                        
+                        is_new_person = 1 > random.randint(0,9)
+                        if (datos[0] in nombres_personas and not is_new_person):
 
-
-                        if accidente not in Accidente.objects.all():
-                            accidente.save()
-
-                        if datos[0] in nombres_personas:
-
-                            persona = [persona for persona in Persona.objects.all() if persona.nombre == datos[0]][0]
-
-                            print(persona,'\n\n\n\n')
+                            persona_datos = Persona.objects.filter(nombre=datos[0])[0]
+                            print(persona_datos)
+                            persona = Persona()
+                            
+                            persona.nombre = persona_datos.nombre
+                            persona.rut = persona_datos.rut
+                            diferencia_de_tiempo = int(accidente.fecha.split('-')[0]) - int(str(persona_datos.Accidentes.fecha).split('-')[0])
+                            persona.edad= persona_datos.edad + diferencia_de_tiempo
+                            persona.sexo = persona_datos.sexo
                             persona.embarazo = datos[4]
                             persona.sindical = datos[5]
                             persona.Accidentes = accidente
