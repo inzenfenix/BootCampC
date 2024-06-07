@@ -92,7 +92,7 @@ class Cantidad_Accidentes_embarazo(views.APIView):
 class Cantidad_Accidentes_edad(views.APIView): 
     def get(self, request, edad_min, edad_max):
         personas = Persona.objects.all()
-        result = len([persona for persona in personas if persona.edad >= edad_min and persona.edad <= edad_max])
+        result = len([persona for persona in personas if persona.edad >= int(edad_min) and persona.edad <= int(edad_max)])
         return Response(f'Han ocurrido {result} accidentes a personas entre {edad_min} y {edad_max} años.')
 
 # Servicio 8
@@ -188,7 +188,7 @@ class Accidentes_sexo_embarazo_edad(views.APIView):
 # Servicio 14
 class Accidentes_Embarazo_DiasPerdidos(views.APIView):
     def get(self, request, dia_min, dia_max):
-        return HttpResponse(serializers.serialize('json',[persona for persona in Persona.objects.all() if persona.embarazo == True and persona.Accidentes.dias_perdidos >= dia_min and persona.Accidentes.dias_perdidos <= dia_max]), content_type='application/json')
+        return HttpResponse(serializers.serialize('json',[persona for persona in Persona.objects.all() if persona.embarazo and persona.Accidentes.dias_perdidos >= int(dia_min) and persona.Accidentes.dias_perdidos <= int(dia_max)]), content_type='application/json')
 
 # Servicio 15
 class Accidentes_SindicalProcedimiento(views.APIView):
@@ -223,7 +223,6 @@ class Accidentes_nombre(views.APIView):
 
 #Post y Get
 class GetSimuladorDataView(views.APIView):
-
     def post(self,request):
         ruta = getcwd() + "/web/bin/"
         print(ruta)
