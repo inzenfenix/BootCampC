@@ -24,7 +24,7 @@ def fechar_fecha(fecha):
     return fecha
 
 # Servicio 1
-class Cantidad_Accidente_total(views.APIView):
+class Cantidad_Accidentes_total(views.APIView):
     def get(self,request):
         accidentes = Accidente.objects.all()
         accidentes_tipo_1 = [accidente for accidente in accidentes if accidente.contexto == "Accidente a causa de trabajo"]        
@@ -70,7 +70,7 @@ class Listado_personas(views.APIView):
         return Response(qs2)
     
 # Servicio 5
-class AccidentesPorSexo(views.APIView):
+class Cantidad_Accidentes_PorSexo(views.APIView):
     def get(self,request):
         qsM = Persona.objects.filter(sexo="M").count()
         qsF = Persona.objects.filter(sexo="F").count()
@@ -90,20 +90,20 @@ class Cantidad_Accidentes_embarazo(views.APIView):
 
 # Servicio 7
 class Cantidad_Accidentes_edad(views.APIView): 
-    def get(self, request, edad):
+    def get(self, request, edad_min, edad_max):
         personas = Persona.objects.all()
-        result = len([persona for persona in personas if persona.edad == edad])
-        return Response(f'Han ocurrido {result} accidentes a personas de {edad} anos.')
+        result = len([persona for persona in personas if persona.edad >= edad_min and persona.edad <= edad_max])
+        return Response(f'Han ocurrido {result} accidentes a personas entre {edad_min} y {edad_max} años.')
 
 # Servicio 8
-class AccidentesPorSindical(views.APIView):
+class Accidentes_PorSindical(views.APIView):
     def get(self,request):
         qs = Persona.objects.filter(sindical=True).distinct()
         qs2 = [f"Nombre:{persona.nombre}, Accidente:{persona.Accidentes.descripcion}" for persona in qs]
         return Response(qs2)
 
 # Servicio 9
-class Get_Accidente_Procedimiento(views.APIView): 
+class Get_Accidentes_Procedimiento(views.APIView): 
     def get(self, request):
         personas = Persona.objects.all()
         qs_r = [persona for persona in personas if persona.Accidentes.procedimiento_aplicado] # persona => accidente => procedimiento_aplicado
@@ -111,7 +111,7 @@ class Get_Accidente_Procedimiento(views.APIView):
         return HttpResponse(qs_json, content_type='application/json')
     
 # Servicio 9.1  Literalmente lo contrario xd    
-class Get_Accidente_No_Procedimiento(views.APIView):
+class Get_Accidentes_Sin_Procedimiento(views.APIView):
     def get(self,request):
         personas = Persona.objects.all()
         qs_r = [persona for persona in personas if not persona.Accidentes.procedimiento_aplicado] # persona => accidente => procedimiento_aplicado
@@ -119,28 +119,31 @@ class Get_Accidente_No_Procedimiento(views.APIView):
         return HttpResponse(qs_json, content_type='application/json')
 
 # Servicio 10
-class Get_Accidente_DiasPerdidos(views.APIView): 
-    def get(self, request, dia1, dia2): #dia1 = rango inferior, dia2 = rango superior
+class Get_Accidentes_DiasPerdidos(views.APIView): 
+    def get(self, request, dia_min, dia_max):
         accidentes = Accidente.objects.all()
-        if dia1 == 'n':
-            dia1 = 0
+        if dia_min == 'n':
+            dia_min = 0
         else:
-            dia1 = int(dia1)
-        if dia2 == 'n':
-            dia2 = 9001
+            dia_min = int(dia_min)
+        if dia_max == 'n':
+            dia_max = 9001
         else:
-            dia2 = int(dia2)
+            dia_max = int(dia_max)
 
-        qs_r = [accidente for accidente in accidentes if accidente.dias_perdidos >= dia1 and accidente.dias_perdidos <= dia2]
+        qs_r = [accidente for accidente in accidentes if accidente.dias_perdidos >= dia_min and accidente.dias_perdidos <= dia_max]
         qs_json = serializers.serialize('json', qs_r)
         return HttpResponse(qs_json, content_type='application/json')
 
-# Servicio 11 Terminar
+# Servicio 11
 class Accidentes_Fecha_Sexo(views.APIView):
     def get(self,request,sexo,desde,hasta):
-
         desde = fechar_fecha(desde)
         hasta = fechar_fecha(hasta)
+
+        qs = [accidente for accidente in Accidente.objects.all() if accidente.fecha >= desde and accidente.fecha <= hasta]
+        qs_json = serializers.serialize('json', qs)
+        return HttpResponse(qs_json, content_type='application/json')
 
 # Servicio 11.1 Dice cantidad envez de accidentes
 class Cantidad_Accidentes_Fecha_Sexo(views.APIView):
@@ -160,32 +163,35 @@ class Cantidad_Accidentes_Fecha_Sexo(views.APIView):
 
 # Servicio 12
 class Accidentes_Fecha_sexo_embarazo(views.APIView): 
-    def get(self, request, fecha, sexo):
+    def get(self, request, desde, hasta, sexo):
         personas = Persona.objects.all()
-        result = [persona.Accidentes for persona in personas if persona.Accidentes.fecha == fecha and persona.sexo == sexo and persona.embarazo == True]
+        desde = fechar_fecha(desde)
+        hasta = fechar_fecha(hasta)
+
+        result = [persona.Accidentes for persona in personas if persona.Accidentes.fecha >= desde and persona.Accidentes.fecha <= hasta and persona.sexo == sexo and persona.embarazo == True]
         qs_json = serializers.serialize('json', result)
         return HttpResponse(qs_json, content_type='application/json')
 
 # Servicio 13 Revisar
 class Accidentes_sexo_embarazo_edad(views.APIView):
-    def get(self,request,sexo,edad):
+    def get(self,request,sexo,edad_min, edad_max):
         personas = Persona.objects.filter(sexo=sexo)
-        personas = [persona for persona in personas if (persona.embarazo and persona.edad == edad)]
+        personas = [persona for persona in personas if persona.embarazo >= edad_min and persona.edad <= edad_max]
         
         if sexo == "M":
             sexo = "Mujeres"
         else:
             sexo = "Hombres"
 
-        return Response(f'Hay {len(personas)} {sexo} con {edad} anos que sufrieron accidentes estando embarazadas.')
+        return Response(f'Hay {len(personas)} {sexo} entre {edad_min} y {edad_max} años que sufrieron accidentes estando embarazadas.')
     
 # Servicio 14
-class AccidenteEmbarazoDiasPerdidos(views.APIView):
-    def get(self, request, dias):
-        return HttpResponse(serializers.serialize('json',[persona for persona in Persona.objects.all() if persona.embarazo == True and persona.Accidentes.dias_perdidos == dias]), content_type='application/json')
+class Accidentes_Embarazo_DiasPerdidos(views.APIView):
+    def get(self, request, dia_min, dia_max):
+        return HttpResponse(serializers.serialize('json',[persona for persona in Persona.objects.all() if persona.embarazo == True and persona.Accidentes.dias_perdidos >= dia_min and persona.Accidentes.dias_perdidos <= dia_max]), content_type='application/json')
 
 # Servicio 15
-class AccidenteSindicalProcedimiento(views.APIView):
+class Accidentes_SindicalProcedimiento(views.APIView):
     def get(self,request):
         qs = Persona.objects.filter(sindical=True).distinct()
         qs2 = []
