@@ -39,5 +39,6 @@ urlpatterns = [
     path(f'AccidenteEmbarazoDiasPerdidos/<dia_min>/<dia_max>/', views.Accidentes_Embarazo_DiasPerdidos.as_view(),name='Dias perdidos embarazo'), #Servicio 14
     path('AccidenteSindicalProcedimiento/', views.Accidentes_SindicalProcedimiento.as_view(),name='Accidnete procedimiento sindical'), #Servicio 15
     path(f'CantidadIncidentes/<fecha_inicio>/', views.CantidadIncidentes.as_view(),name='Incidentes'), #Propuesta Servicio: Cantidad de Incidentes
-    path(f'Accidentes/<name>/', views.Accidentes_nombre.as_view(),name='Accidentes de __')#Propuesta Servicio: Accidentes de una persona
+    path(f'Accidentes/<name>/', views.Accidentes_nombre.as_view(),name='Accidentes de __'),#Propuesta Servicio: Accidentes de una persona
+    path(f'AplicarProcedimiento/<name>/<num_accidente>/',views.Aplicar_Procedimiento.as_view(),name='Aplicar Procedimiento')#Propuesta Servicio: Procedimiento Aplicado
 ]

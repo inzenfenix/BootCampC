@@ -9,9 +9,11 @@ from .models import Persona
 from os import getcwd
 import random
 import json as js
+import pytz
 
 #Funcion que fecha la fecha
 def fechar_fecha(fecha):
+    utc=pytz.UTC
     if len(fecha.split('-')) == 1:
         fecha = timezone.datetime.strptime(f'{fecha}-1-1', "%Y-%m-%d")
     
@@ -21,7 +23,7 @@ def fechar_fecha(fecha):
     else:
         fecha = timezone.datetime.strptime(fecha, "%Y-%m-%d") 
 
-    return fecha
+    return utc.localize(fecha)
 
 # Servicio 1
 class Cantidad_Accidentes_total(views.APIView):
@@ -141,6 +143,8 @@ class Accidentes_Fecha_Sexo(views.APIView):
         desde = fechar_fecha(desde)
         hasta = fechar_fecha(hasta)
 
+        
+
         qs = [accidente for accidente in Accidente.objects.all() if accidente.fecha >= desde and accidente.fecha <= hasta]
         qs_json = serializers.serialize('json', qs)
         return HttpResponse(qs_json, content_type='application/json')
@@ -168,15 +172,15 @@ class Accidentes_Fecha_sexo_embarazo(views.APIView):
         desde = fechar_fecha(desde)
         hasta = fechar_fecha(hasta)
 
-        result = [persona.Accidentes for persona in personas if persona.Accidentes.fecha >= desde and persona.Accidentes.fecha <= hasta and persona.sexo == sexo and persona.embarazo == True]
+        result = [persona.Accidentes for persona in personas if (persona.Accidentes.fecha >= desde and persona.Accidentes.fecha <= hasta and persona.sexo == sexo and persona.embarazo)]
         qs_json = serializers.serialize('json', result)
         return HttpResponse(qs_json, content_type='application/json')
 
-# Servicio 13 Revisar
+# Servicio 13 
 class Accidentes_sexo_embarazo_edad(views.APIView):
     def get(self,request,sexo,edad_min, edad_max):
         personas = Persona.objects.filter(sexo=sexo)
-        personas = [persona for persona in personas if persona.embarazo >= edad_min and persona.edad <= edad_max]
+        personas = [persona for persona in personas if (persona.embarazo and persona.edad>= int(edad_min) and persona.edad <= int(edad_max))]
         
         if sexo == "M":
             sexo = "Mujeres"
@@ -219,13 +223,23 @@ class Accidentes_nombre(views.APIView):
         for persona in personas:
             result.append(f'Accidente{persona.Accidentes}')
         return Response(result)
+    
+#Propuesta Servicio: Aplicar Procedimiento:
+class Aplicar_Procedimiento(views.APIView):
+    def get(self,request,name,num_accidente):
+        personas = Persona.objects.filter(nombre=name)
+        accidentes = [persona.Accidentes for persona in personas]
+        accidente = accidentes[int(num_accidente)-1]
+        accidente.procedimiento_aplicado = True
+        accidente.save()
+        return Response(f'El Procedimiento ha sido exitosamente aplicado.')
 
 
 #Post y Get
 class GetSimuladorDataView(views.APIView):
+
     def post(self,request):
         ruta = getcwd() + "/web/bin/"
-        print(ruta)
         comando = "FinalRandomizer"
         results = self.__exec(ruta,comando).split("/n")
         nombres_personas = set([nombre.nombre for nombre in Persona.objects.all()])
@@ -251,7 +265,6 @@ class GetSimuladorDataView(views.APIView):
                         if (datos[0] in nombres_personas and not is_new_person):
 
                             persona_datos = Persona.objects.filter(nombre=datos[0])[0]
-                            print(persona_datos)
                             persona = Persona()
                             
                             persona.nombre = persona_datos.nombre
@@ -288,3 +301,4 @@ class GetSimuladorDataView(views.APIView):
         out, err = res.communicate()
         cad = ''.join(e for e in out.decode("utf-8"))
         return cad  
+
