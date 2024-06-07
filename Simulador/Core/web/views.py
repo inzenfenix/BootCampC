@@ -108,17 +108,15 @@ class Accidentes_PorSindical(views.APIView):
 class Get_Accidentes_Procedimiento(views.APIView): 
     def get(self, request):
         personas = Persona.objects.all()
-        qs_r = [persona for persona in personas if persona.Accidentes.procedimiento_aplicado] # persona => accidente => procedimiento_aplicado
-        qs_json = serializers.serialize('json', qs_r)
-        return HttpResponse(qs_json, content_type='application/json')
+        qs_r = [f'{persona} {persona.Accidentes}' for persona in personas if persona.Accidentes.procedimiento_aplicado] # persona => accidente => procedimiento_aplicado
+        return Response(qs_r)
     
 # Servicio 9.1  Literalmente lo contrario xd    
 class Get_Accidentes_Sin_Procedimiento(views.APIView):
     def get(self,request):
         personas = Persona.objects.all()
-        qs_r = [persona for persona in personas if not persona.Accidentes.procedimiento_aplicado] # persona => accidente => procedimiento_aplicado
-        qs_json = serializers.serialize('json', qs_r)
-        return HttpResponse(qs_json, content_type='application/json')
+        qs_r = [f'{persona} {persona.Accidentes}' for persona in personas if not persona.Accidentes.procedimiento_aplicado] # persona => accidente => procedimiento_aplicado
+        return Response(qs_r)
 
 # Servicio 10
 class Get_Accidentes_DiasPerdidos(views.APIView): 
